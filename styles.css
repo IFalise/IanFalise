@@ -3,13 +3,26 @@ ul {
     margin: 0;
     padding: 0;
   }
+  h1{
+    color: turquoise;
+    text-align: center;
+    background-color: white;
+    font-style: bold;
+
+  }
   h3{
-    color: rgb(6, 255, 251);
+    color: red(6, 255, 251);
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-    margin: 20px;
-
+  }
+  
+  .profile-pic{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: block;
   }
   
   
