@@ -4,11 +4,16 @@ ul {
     padding: 0;
   }
   h1{
-    color: turquoise;
+    color: #ff49bf;
     text-align: center;
     background-color: white;
     font-style: bold;
+    background-color: #0046DB ;
 
+head{
+    background-color: #0046DB;
+
+}
 
   }
   h3{
@@ -19,13 +24,52 @@ ul {
   }
   
   .profile-pic{
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
+    border-color: white;
+    border-width: 5px;
+    border-style: solid;
     margin: 0 auto;
     display: block;
   }
- 
-body{
+  
+  body{
     background-color: #4E52D7;
-}
+  }
+
+  a{
+    color:white
+  }
+  p{
+    color:white;
+    background-color: #0046DB;
+    border-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border-style: solid;
+  }
+  h2{
+    color:white;
+  }
+
+  .contact{
+    text-align: center;
+    margin-top: 40px;
+    color: #3EDEB0;
+    font-size: 30px;
+    font-weight: bold;
+    display: block;
+    color:white;
+    background-color: #0046DB;
+    border-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border-style: solid;
+    
+  }
+  .end{
+    padding-bottom: 10px;
+  }
+  .last{
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+  }
