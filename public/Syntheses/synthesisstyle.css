@@ -18,10 +18,15 @@ h1{
     margin: 10px;
   }
 body{
-    background-color: #ff52d4
+    background-image: url("background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
 }
 .return{
     padding:5px;
+ 
 }
 
 .link{
@@ -29,4 +34,8 @@ body{
 }
 h3{
     text-decoration: underline;
+}
+
+button{
+    align-items: center;
 }
