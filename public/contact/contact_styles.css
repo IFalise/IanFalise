@@ -68,12 +68,31 @@ textarea {
 [type="range"]:focus {
   outline: none;
 }
+head {
+  border-color: red;
+  border-width: 15px;
+  border-radius: 15px;
+}
 
 /** Components **/
 
 .fs-form {
   display: grid;
   row-gap: 1.5rem;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 40px;
+  background-color: orange;
+  border: 3px solid var(--color-border-default);
+  border-radius : 15px;
+  padding-top: 40px;
+}
+
+.container{
+  background-color: orange;
+  border-color: red;
+  border-width: 15px;
+  border-radius: 15px;
 }
 
 .fs-form:where(.fs-layout__2-column) {
@@ -397,6 +416,6 @@ fieldset {
     border-radius: 5px;
     border: 1px solid #ccc;
 }
-.background{
-    color-scheme: orange; 
+body{
+    background: -webkit-repeating-radial-gradient(red, orange);
 }
