@@ -7,32 +7,33 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>  
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="msvalidate.01" content="727B1D31A902B0A388128832B84B3A45" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About_Me</title>
     <link rel="stylesheet" href="styles.css">
-    <h1>Ian Falise - Inorganic Chemist</h1>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+      <h1>Ian Falise - Inorganic Chemist</h1>
+    </header>
     <div class="container">
         <h2>About Me</h2>
-        <p style="padding: 10px; border: 2px solid #0046DB;">Welcome to my portfolio! Take a look at my syntheses, spectrographic analyses, projects, and more!  </p>
+        <p class="content-box">Welcome to my portfolio! Take a look at my syntheses, spectrographic analyses, projects, and more!  </p>
         <div class="profile">
             <img src="profilepic.jpg" alt="Profile Picture" class="profile-pic">
         <h2>Organic Synthetic Projects:</h2>
-        <ul>
-           <a href="Syntheses.html" style="padding: 10px; border: 2px solid #0046DB;">Click here to view my organic syntheses!</a>
-        </ul>
-        <h2>Spectroscopy Demos and Practice:</h2>
-        <a href="spectroscopy.html" style="padding: 10px; border: 2px solid #0046DB;">Coming soon...</a>
-        <h2>Programming Projects:</h2>
-        <a href="programming.html" style="padding: 10px; border: 2px solid #0046DB;">Coming soon...</a>
-        <h2>Research:</h2>
-        <a href="research.html" class="last" style="padding: 10px; border: 2px solid #0046DB;">Coming soon...</a>
-        <a href= "contact.html" class="contact">Contact Me Here</a>
-    </ul> 
+        <nav class="nav-links">
+          <ul>
+            <li><a href="Syntheses.html">Click here to view my organic syntheses!</a></li>
+            <li><a href="spectroscopy.html">Coming soon...</a></li>
+            <li><a href="programming.html">Coming soon...</a></li>
+            <li><a href="research.html" class="last">Coming soon...</a></li>
+            <li><a href="contact.html" class="contact">Contact Me Here</a></li>
+          </ul>
+        </nav>
     </div>
 </body>
 </html>
