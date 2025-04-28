@@ -3,9 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from flask import Flask, request, render_template_string, send_file
+from flask_cors import CORS
 import io
 # %%
 app = Flask(__name__)
+CORS(app)
 
 def process_data(df):
     plt.style.use('_mpl-gallery')
