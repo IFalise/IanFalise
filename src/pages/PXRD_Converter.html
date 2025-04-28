@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PXRD_Converter</title>
+</head>
+<body>
+  <h1>PXRD Converter</h1>
+
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv" required>
+    <button type="submit">Upload & Visualize</button>
+  </form>
+
+  <div id="plotContainer">
+    <!-- Plot will be rendered here -->
+    <img id="plotImg" alt="PXRD plot" style="max-width:100%; display:none;">
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      try {
+        const response = await fetch('http://127.0.0.1:5000/upload', {
+          method: 'POST',
+          body: formData
+        });
+        if (!response.ok) {
+          const text = await response.text();
+          alert('Error: ' + text);
+          return;
+        }
+        const blob = await response.blob();
+        const img = document.getElementById('plotImg');
+        img.src = URL.createObjectURL(blob);
+        img.style.display = 'block';
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
