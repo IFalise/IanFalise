@@ -9,8 +9,8 @@
   <h1>PXRD Converter</h1>
 
   <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="file" accept=".csv" required>
-    <button type="submit">Upload & Visualize</button>
+    <input type="file" name="file" accept=".txt" required>
+    <button type="submit">Upload .TXT & Visualize</button>
   </form>
 
   <div id="plotContainer">
@@ -23,7 +23,7 @@
       e.preventDefault();
       const formData = new FormData(this);
       try {
-        const response = await fetch('http://127.0.0.1:5000/upload', {
+        const response = await fetch('/upload', {
           method: 'POST',
           body: formData
         });
@@ -36,6 +36,7 @@
         const img = document.getElementById('plotImg');
         img.src = URL.createObjectURL(blob);
         img.style.display = 'block';
+        window.scrollTo({ top: img.offsetTop - 20, behavior: 'smooth' });
       } catch (err) {
         alert('Upload failed: ' + err.message);
       }
