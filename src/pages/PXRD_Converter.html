@@ -19,11 +19,17 @@
   </div>
 
   <script>
+    // ---- API endpoint detection ----
+    const API_BASE =
+      location.hostname === 'ianfalise.com'
+        ? 'https://pxrd-api.ianfalise.com'   // <-- change to YOUR Flask host
+        : 'http://127.0.0.1:5000';
+
     document.getElementById('uploadForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const formData = new FormData(this);
       try {
-        const response = await fetch('/upload', {
+        const response = await fetch(`${API_BASE}/upload`, {
           method: 'POST',
           body: formData
         });
