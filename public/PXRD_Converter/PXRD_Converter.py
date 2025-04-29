@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -61,7 +62,7 @@ upload_page = '''
 <title>Upload File</title>
 <h1>Upload CSV File</h1>
 <form action="/upload" method="post" enctype="multipart/form-data">
-  <input type="file" name="file">
+  <input type="file" name="file" accept=".txt" required>
   <input type="submit" value="Upload">
 </form>
 '''
@@ -74,7 +75,10 @@ def home():
 @app.route('/upload', methods=['POST'])
 def upload():
     uploaded_file = request.files['file']
-    df = pd.read_csv(uploaded_file)
+    # only allow .txt uploads
+    if not uploaded_file.filename.lower().endswith('.txt'):
+        return "Error: Please upload a .txt file.", 400
+    df = pd.read_csv(uploaded_file, sep=r'[,\s\t]+', engine='python')
     # Validate: require at least two columns for x and y
     if df.shape[1] < 2:
         return "Error: Uploaded CSV must contain at least two columns.", 400
