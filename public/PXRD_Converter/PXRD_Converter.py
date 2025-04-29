@@ -1,13 +1,17 @@
-# %%
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from flask import Flask, request, render_template_string, send_file
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import io
 # %%
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    resources={r"/upload": {"origins": "https://ianfalise.com"}},
+    supports_credentials=False,
+    expose_headers="Content-Disposition"
+)
 
 def process_data(df):
     plt.style.use('_mpl-gallery')
@@ -66,6 +70,7 @@ upload_page = '''
 def home():
     return render_template_string(upload_page)
 
+@cross_origin(origin='https://ianfalise.com', methods=['POST'], headers=['Content-Type'])
 @app.route('/upload', methods=['POST'])
 def upload():
     uploaded_file = request.files['file']
@@ -83,5 +88,3 @@ def upload():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-# %%
