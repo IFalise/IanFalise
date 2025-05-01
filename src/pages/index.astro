@@ -4,7 +4,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
-
 <!DOCTYPE html>
 <html lang="en">
 <head>  
@@ -27,16 +26,36 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         </div>
        
         <nav class="nav-links">
-          <ul>
+
+          <section class="nav-section">
             <h2>Organic Synthetic Projects:</h2>
-            <li><a href="Syntheses.html">Click here to view my organic syntheses!</a></li>
+            <ul>
+              <li><a href="Syntheses.html">Click here to view my organic syntheses!</a></li>
+            </ul>
+          </section>
+
+          <section class="nav-section">
             <h2>PXRD Converter and Visualizer:</h2>
-            <li><a href="PXRD_Converter.html">Click here to view my PXRD converter!</a></li>
-            <li><a href="spectroscopy.html">Coming soon...</a></li>
-            <li><a href="programming.html">Coming soon...</a></li>
-            <li><a href="research.html" class="last">Coming soon...</a></li>
-            <li><a href="contact.html" class="contact">Contact Me Here</a></li>
-          </ul>
+            <ul>
+              <li><a href="PXRD_Converter.html">Click here to view my PXRD converter!</a></li>
+            </ul>
+          </section>
+
+          <section class="nav-section">
+            <h2>More Projects:</h2>
+            <ul>
+              <li><a href="spectroscopy.html">Coming soon...</a></li>
+              <li><a href="programming.html">Coming soon...</a></li>
+              <li><a href="research.html" class="last">Coming soon...</a></li>
+            </ul>
+          </section>
+
+          <section class="nav-section">
+            <ul>
+              <li><a href="contact.html" class="contact">Contact Me Here</a></li>
+            </ul>
+          </section>
+
         </nav>
     </div>
 </body>
