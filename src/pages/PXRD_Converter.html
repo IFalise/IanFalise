@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PXRD_Converter</title>
+  <style>
+    /* Center the plot image after it loads */
+    #plotContainer {
+      display: flex;
+      justify-content: center;   /* horizontal centering */
+      margin-top: 20px;          /* space below the form */
+    }
+    #plotImg {
+      max-width: 80%;            /* keep image responsive */
+      height: auto;
+      display: none;             /* stays hidden until JS shows it */
+    }
+  </style>
 </head>
 <body>
   <h1>PXRD Converter</h1>
@@ -15,14 +28,14 @@
 
   <div id="plotContainer">
     <!-- Plot will be rendered here -->
-    <img id="plotImg" alt="PXRD plot" style="max-width:100%; display:none;">
+    <img id="plotImg" alt="PXRD plot">
   </div>
 
   <script>
     // ---- API endpoint detection ----
     const API_BASE =
-      location.hostname === 'ianfalise.com'
-        ? 'https://pxrd-api.ianfalise.com'   // <-- change to YOUR Flask host
+      ['ianfalise.com', 'www.ianfalise.com'].includes(location.hostname)
+        ? 'https://pxrd-api.ianfalise.com'
         : 'http://127.0.0.1:5000';
 
     document.getElementById('uploadForm').addEventListener('submit', async function(e) {
@@ -31,7 +44,8 @@
       try {
         const response = await fetch(`${API_BASE}/upload`, {
           method: 'POST',
-          body: formData
+          body: formData,
+          mode: 'cors',
         });
         if (!response.ok) {
           const text = await response.text();
