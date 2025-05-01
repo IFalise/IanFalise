@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -12,8 +13,12 @@ CO_RAD = 1.79   # fallback (change if you really use Co radiation)
 app = Flask(__name__)
 CORS(
     app,
-    resources={r"/upload": {"origins": ["https://ianfalise.com", "http://127.0.0.1:5500"]}},
-    supports_credentials=False,
+    resources={r"/upload": {"origins": [
+        "https://ianfalise.com",
+        "https://www.ianfalise.com",
+        "http://127.0.0.1:5500"
+    ]}},
+    methods=["POST", "OPTIONS"],
     expose_headers="Content-Disposition"
 )
 
@@ -78,8 +83,11 @@ upload_page = '''
 def home():
     return render_template_string(upload_page)
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['POST', 'OPTIONS'])
 def upload():
+    # Handle CORS pre‑flight
+    if request.method == 'OPTIONS':
+        return "", 204
     uploaded_file = request.files['file']
     # only allow .txt uploads
     if not uploaded_file.filename.lower().endswith('.txt'):
@@ -99,5 +107,4 @@ def upload():
 if __name__ == '__main__':
     app.run(debug=True)
 
-# %%
 # %%
