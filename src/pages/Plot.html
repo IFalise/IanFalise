@@ -9,8 +9,8 @@
 
 <style>
   body{font-family:sans-serif;max-width:960px;margin:2rem auto;display:flex;gap:2rem;}
-  #left{flex:1 1 300px;}  /* controls */
-  #right{flex:2 1 600px;} /* plot */
+  #left{flex:1 1 300px;}          /* controls */
+  #right{flex:2 1 600px;}         /* plot */
   canvas{max-width:100%;height:500px;}
   #seriesList{margin-top:1rem;font-size:.9rem;}
   #seriesList label{display:block;margin:.25rem 0;}
@@ -19,7 +19,6 @@
   button{padding:.6rem 1rem;font-size:1rem;margin-top:.5rem;}
   input[type="number"]{width:6rem;}
 </style>
-<href="ploystyles.css" ></href>
 </head>
 <body>
 
@@ -38,7 +37,7 @@
   <input type="file" id="filePicker" multiple accept=".csv,.txt,text/csv,text/plain"><br>
   <div id="dropZone">…or drag files here</div>
 
-  <button id="plotBtn" disabled>Convert & Add to Plot</button>
+  <button id="plotBtn" disabled>Convert &amp; Add to Plot</button>
 
   <div id="seriesList"><strong>Series:</strong></div>
 </div>
@@ -90,7 +89,7 @@ document.getElementById('plotBtn').addEventListener('click', ()=>{
   document.getElementById('plotBtn').disabled = true;
 });
 
-/* ── 4.  Convert one file’s text with your exact formula ─────────── */
+/* ── 4.  Convert one file’s text ─────────────────────────────────── */
 function convertText(raw, CU_RAD, CO_RAD){
   const H = [], intens = [];
   raw.split(/\r?\n+/).forEach(line=>{
@@ -114,8 +113,7 @@ function convertText(raw, CU_RAD, CO_RAD){
 function addDataset(label, xArr, yArr){
   if(!chart) initChart();
 
-  // generate distinct colour via Chart.js helper
-  const colour = Chart.helpers.color(Chart.defaults.color).alpha(1).rgbString();
+  const colour = getRandomColor();   // random initial colour
 
   chart.data.datasets.push({
     label,
@@ -125,7 +123,7 @@ function addDataset(label, xArr, yArr){
     backgroundColor: colour
   });
   chart.update();
-  addSeriesCheckbox(label);
+  addSeriesCheckbox(label, colour);
 }
 
 function initChart(){
@@ -138,28 +136,41 @@ function initChart(){
       responsive:true,
       interaction:{mode:'nearest',axis:'xy',intersect:false},
       scales:{
-        x:{title:{display:true,text:'Cu 2θ (degrees)'}},
+        x:{title:{display:true,text:'Cu 2θ (°)'}},
         y:{title:{display:true,text:'Intensity'}}
       }
     }
   });
 }
 
-/* ── 6.  Checkbox controls for visibility / delete ───────────────── */
-function addSeriesCheckbox(label){
+/* ── 6.  Checkbox controls for visibility / colour / delete ─────── */
+function addSeriesCheckbox(label, colour){
   const seriesDiv = document.getElementById('seriesList');
 
-  const id = 'chk_' + label.replace(/\W+/g,'_') + '_' + Date.now();
+  const idBase = 'id_' + label.replace(/\W+/g,'_') + '_' + Date.now();
   const wrapper = document.createElement('label');
-  wrapper.innerHTML = `<input type="checkbox" id="${id}" checked> ${label}
-                       <button data-del="${id}" style="margin-left:.5rem;font-size:.8rem;">✖</button>`;
+  wrapper.innerHTML = `
+    <input type="checkbox" id="${idBase}_chk" checked>
+    ${label}
+    <input type="color" id="${idBase}_col" value="${colour}" style="margin-left:.3rem;vertical-align:middle;">
+    <button data-del="${idBase}" style="margin-left:.5rem;font-size:.8rem;">✖</button>`;
   seriesDiv.appendChild(wrapper);
 
   // toggle visibility
-  wrapper.querySelector('input').addEventListener('change', e=>{
+  wrapper.querySelector(`#${idBase}_chk`).addEventListener('change', e=>{
     const dsIndex = chart.data.datasets.findIndex(d=>d.label===label);
     chart.setDatasetVisibility(dsIndex, e.target.checked);
     chart.update();
+  });
+
+  // change colour
+  wrapper.querySelector(`#${idBase}_col`).addEventListener('input', e=>{
+    const dsIndex = chart.data.datasets.findIndex(d=>d.label===label);
+    if(dsIndex>-1){
+      const newCol = e.target.value;
+      chart.data.datasets[dsIndex].backgroundColor = newCol;
+      chart.update();
+    }
   });
 
   // delete dataset
@@ -171,6 +182,11 @@ function addSeriesCheckbox(label){
     }
     wrapper.remove();
   });
+}
+
+/* ── 7.  Utility: random hex colour ──────────────────────────────── */
+function getRandomColor(){
+  return '#' + Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0');
 }
 </script>
 </body>
