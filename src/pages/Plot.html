@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PXRD Multi-File Converter & Overlay Plotter</title>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  body{font-family:sans-serif;max-width:960px;margin:2rem auto;display:flex;gap:2rem;}
+  #left{flex:1 1 300px;}  /* controls */
+  #right{flex:2 1 600px;} /* plot */
+  canvas{max-width:100%;height:500px;}
+  #seriesList{margin-top:1rem;font-size:.9rem;}
+  #seriesList label{display:block;margin:.25rem 0;}
+  #dropZone{border:2px dashed #888;padding:1rem;text-align:center;margin:.5rem 0;}
+  #dropZone.drag{background:#eef;}
+  button{padding:.6rem 1rem;font-size:1rem;margin-top:.5rem;}
+  input[type="number"]{width:6rem;}
+</style>
+<href="ploystyles.css" ></href>
+</head>
+<body>
+
+<div id="left">
+  <h3>Load PXRD files</h3>
+
+  <p>
+    <label>CU<sub>RAD</sub>:
+      <input type="number" id="cu" step="0.0001" value="1.5406">
+    </label><br>
+    <label>CO<sub>RAD</sub>:
+      <input type="number" id="co" step="0.0001" value="1.7890">
+    </label>
+  </p>
+
+  <input type="file" id="filePicker" multiple accept=".csv,.txt,text/csv,text/plain"><br>
+  <div id="dropZone">…or drag files here</div>
+
+  <button id="plotBtn" disabled>Convert & Add to Plot</button>
+
+  <div id="seriesList"><strong>Series:</strong></div>
+</div>
+
+<div id="right">
+  <canvas id="myChart"></canvas>
+</div>
+
+<script>
+/* ── 1.  Global state ────────────────────────────────────────────── */
+let pendingFiles = [];   // files waiting to be processed
+let chart;               // Chart.js instance
+const DEG2RAD = Math.PI / 180;
+
+/* ── 2.  File pick / drag-drop ───────────────────────────────────── */
+const picker = document.getElementById('filePicker');
+const drop   = document.getElementById('dropZone');
+picker.addEventListener('change', e => queueFiles([...e.target.files]));
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e=>{
+  e.preventDefault(); drop.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e=>{
+  e.preventDefault(); drop.classList.remove('drag'); }));
+drop.addEventListener('drop', e => queueFiles([...e.dataTransfer.files]));
+
+function queueFiles(files){
+  if(!files.length) return;
+  pendingFiles.push(...files);
+  document.getElementById('plotBtn').disabled = false;
+}
+
+/* ── 3.  “Convert & Add” button  ─────────────────────────────────── */
+document.getElementById('plotBtn').addEventListener('click', ()=>{
+  if(!pendingFiles.length) return;
+
+  const CU_RAD = +document.getElementById('cu').value;
+  const CO_RAD = +document.getElementById('co').value;
+
+  pendingFiles.forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      const txt = e.target.result.trim();
+      const {H,intens} = convertText(txt, CU_RAD, CO_RAD);
+      if(H.length) addDataset(file.name, H, intens);
+    };
+    reader.readAsText(file);
+  });
+
+  pendingFiles = [];
+  document.getElementById('plotBtn').disabled = true;
+});
+
+/* ── 4.  Convert one file’s text with your exact formula ─────────── */
+function convertText(raw, CU_RAD, CO_RAD){
+  const H = [], intens = [];
+  raw.split(/\r?\n+/).forEach(line=>{
+    if(!line.trim() || /[A-Za-z]/.test(line)) return;   // skip header
+    const [tStr, iStr] = line.trim().split(/[\s,]+/);
+    const theta = +tStr, intensity = +iStr;
+    if(!isFinite(theta) || !isFinite(intensity)) return;
+
+    const angleHalfRad = theta * 0.5 * DEG2RAD;
+    const val = Math.asin( CU_RAD /
+                (2 * (CO_RAD / (2 * Math.sin(angleHalfRad)))) ) * 57.2958 * 2;
+    if(Number.isFinite(val)){
+      H.push(val);
+      intens.push(intensity);
+    }
+  });
+  return {H,intens};
+}
+
+/* ── 5.  Create / update the chart ───────────────────────────────── */
+function addDataset(label, xArr, yArr){
+  if(!chart) initChart();
+
+  // generate distinct colour via Chart.js helper
+  const colour = Chart.helpers.color(Chart.defaults.color).alpha(1).rgbString();
+
+  chart.data.datasets.push({
+    label,
+    data: xArr.map((x,i)=>({x, y:yArr[i]})),
+    showLine:false,
+    pointRadius:3,
+    backgroundColor: colour
+  });
+  chart.update();
+  addSeriesCheckbox(label);
+}
+
+function initChart(){
+  const ctx = document.getElementById('myChart');
+  chart = new Chart(ctx, {
+    type:'scatter',
+    data:{datasets:[]},
+    options:{
+      plugins:{title:{display:true,text:'PXRD: Cu 2θ vs Intensity'}},
+      responsive:true,
+      interaction:{mode:'nearest',axis:'xy',intersect:false},
+      scales:{
+        x:{title:{display:true,text:'Cu 2θ (degrees)'}},
+        y:{title:{display:true,text:'Intensity'}}
+      }
+    }
+  });
+}
+
+/* ── 6.  Checkbox controls for visibility / delete ───────────────── */
+function addSeriesCheckbox(label){
+  const seriesDiv = document.getElementById('seriesList');
+
+  const id = 'chk_' + label.replace(/\W+/g,'_') + '_' + Date.now();
+  const wrapper = document.createElement('label');
+  wrapper.innerHTML = `<input type="checkbox" id="${id}" checked> ${label}
+                       <button data-del="${id}" style="margin-left:.5rem;font-size:.8rem;">✖</button>`;
+  seriesDiv.appendChild(wrapper);
+
+  // toggle visibility
+  wrapper.querySelector('input').addEventListener('change', e=>{
+    const dsIndex = chart.data.datasets.findIndex(d=>d.label===label);
+    chart.setDatasetVisibility(dsIndex, e.target.checked);
+    chart.update();
+  });
+
+  // delete dataset
+  wrapper.querySelector('button').addEventListener('click', ()=>{
+    const dsIndex = chart.data.datasets.findIndex(d=>d.label===label);
+    if(dsIndex>-1){
+      chart.data.datasets.splice(dsIndex,1);
+      chart.update();
+    }
+    wrapper.remove();
+  });
+}
+</script>
+</body>
+</html>
