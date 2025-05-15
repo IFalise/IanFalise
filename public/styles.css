@@ -59,8 +59,11 @@ ul {
 }
 
 .profile-pic {
-  width: 250px;
-  height: 250px;
+  max-width: 250px;      /* do not exceed original size */
+  width: 100%;           /* shrink with container */
+  height: auto;          /* keep aspect ratio */
+  aspect-ratio: 1/1;     /* remain square for the circle */
+  object-fit: cover;     /* fill the circle without distortion */
   border-radius: 50%;
   border: 5px solid var(--text-color);
   margin: 1rem auto;
