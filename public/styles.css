@@ -8,7 +8,8 @@
 }
 
 .titletext {
-  color: #F4ED28
+  color: #F4ED28;
+  background-color: #010036;
 }
 body {
   font-family: var(--font-family);
@@ -31,6 +32,11 @@ h1 {
   padding: 2rem 0;
   background-color: var(--primary-color);
   margin: 0;
+}
+
+.subheading {
+  color: black;
+  text-decoration: solid;
 }
 
 h2 {
