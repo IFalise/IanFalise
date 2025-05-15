@@ -7,9 +7,12 @@
   --font-family: 'Roboto', sans-serif;
 }
 
+.titletext {
+  color: #F4ED28
+}
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-color);
+  background-color: rgba(4, 1, 98, 0.255);
   color: var(--text-color);
   margin: 0;
   padding: 0;
@@ -73,10 +76,16 @@ p {
 
 .nav-links ul {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  flex-direction: column;   /* stack items vertically */
+  align-items: center;      /* center the links */
+  gap: 0.75rem;
   padding: 0;
+  margin: 0;
+}
+
+.nav-section {
   margin: 2rem 0;
+  text-align: center;
 }
 
 .nav-links ul li {
@@ -112,4 +121,17 @@ p {
     margin: 0.5rem 0;
     width: 90%;
   }
+}
+.page-icon {
+  width: 40px;
+  height: 40px;
+  color:#F4ED28;
+}
+.card {
+  background-color: var(--primary-color)
+}
+
+.cardtext {
+  background-color: #F4ED28;
+  color: black;
 }
