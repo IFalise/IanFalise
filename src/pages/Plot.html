@@ -80,7 +80,10 @@ document.getElementById('plotBtn').addEventListener('click', ()=>{
     reader.onload = e=>{
       const txt = e.target.result.trim();
       const {H,intens} = convertText(txt, CU_RAD, CO_RAD);
-      if(H.length) addDataset(file.name, H, intens);
+      if(H.length){
+        addDataset(file.name, H, intens);      // plot
+        downloadConverted(file.name, H, intens); // export as txt
+      }
     };
     reader.readAsText(file);
   });
@@ -107,6 +110,28 @@ function convertText(raw, CU_RAD, CO_RAD){
     }
   });
   return {H,intens};
+}
+
+/* ── 4b.  Download converted data as txt ─────────────────────────── */
+function downloadConverted(originalName, H, intens){
+  if(!H.length) return;
+
+  // derive a clean base name (drop the original extension)
+  const base = originalName.replace(/\.[^./]+$/, '');
+
+  // build tab‑separated text content
+  const lines = H.map((h,i) => h.toFixed(4) + '\t' + intens[i]).join('\n');
+
+  // create a Blob and trigger a download
+  const blob = new Blob([lines], {type: 'text/plain'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = base + '_converted.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 /* ── 5.  Create / update the chart ───────────────────────────────── */
