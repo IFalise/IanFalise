@@ -16,9 +16,23 @@
       height: auto;
       display: none;             /* stays hidden until JS shows it */
     }
+    .home-btn {
+      display: inline-block;
+      padding: .5rem 1rem;
+      font-size: .9rem;
+      text-decoration: none;
+      color: #fff;
+      background: #333;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    .home-btn:hover {
+      background: #555;
+    }
   </style>
 </head>
 <body>
+  <a class="home-btn" href="/">&larr; Back to ianfalise.com</a>
   <h1>PXRD Converter</h1>
 
   <form id="uploadForm" enctype="multipart/form-data">
