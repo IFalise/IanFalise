@@ -3,56 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="synthesisstyle.css">
-    <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-	crossorigin="anonymous">
-    <link
-	rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
-/>
-</head>
-
-
-
-<body>
-    <section class="projects" class="bg-dark text-white text-center py-5" style="background: url('/images/chem-lab.jpg') center/cover no-repeat;">
+    <title>Total Syntheses - Ian Falise</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <style>
-        </style>
-    <div class="return">
-        <button class="btn btn-primary" onclick="location.href='index.html';">Return to Homepage</button>
-    </div>
-        <h2>Reaction Substitution Proposals:</h2>
-        <p>Below are four class projects displaying replacement reactions for total syntheses pulled from published literature, with the rationale for implementation defended.</p>
-        <div class="project">
-        <h3>Proposal 1 (Rugulovasine A): A SmI2 Catalzed Cyclization</h3>
-        <object class="document" data="Exam1.pdf" type="application/pdf" width="auto" height="auto">
-            <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a class="link" href="exam1.pdf">click here to download the PDF file.</a></p>
-        </object>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --light-bg: #ecf0f1;
+            --border-color: #bdc3c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--primary-color);
+        }
+
+        .navbar {
+            background: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .return-btn {
+            margin-bottom: 2rem;
+        }
+
+        .return-btn .btn {
+            background: var(--accent-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .return-btn .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #34495e 100%);
+            color: white;
+            padding: 4rem 0 3rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .syntheses-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem 3rem;
+        }
+
+        .synthesis-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .synthesis-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #2980b9 100%);
+            color: white;
+            padding: 1.5rem;
+            border-bottom: none;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .pdf-viewer {
+            background: #f8f9fa;
+            border: 2px solid var(--light-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pdf-viewer iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .pdf-placeholder {
+            text-align: center;
+            color: #7f8c8d;
+        }
+
+        .pdf-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            opacity: 0.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-bg);
+        }
+
+        .btn-action {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-view {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-download {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #2980b9 100%);
+            color: white;
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .modal-body {
+            padding: 0;
+            background: #f8f9fa;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 70vh;
+            border: none;
+        }
+
+        .modal-lg {
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .proposal-number {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .card-header h3 {
+                font-size: 1.1rem;
+            }
+
+            .btn-action {
+                min-width: 130px;
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .pdf-viewer {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand"><i class="bi bi-beaker-fill"></i> Chemistry Syntheses</span>
         </div>
-        <div class="project">
-            <h3>Proposal 2 ((-)-Centrolobine): Employing a Base-Free Catalytic Wittig Reaction</h3>
-            <object class="document" data="Exam2.pdf" type="application/pdf" width="auto" height="auto">
-                <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a class="link" href="exam1.pdf">click here to download the PDF file.</a></p>
-            </object>
-            </div>
-            <div class="project">
-                <h3>Proposal 3 (Alectinib): Electrocatalytic Hydrogenation of a Terminal Alkyne</h3>
-                <object class="document" data="Exam3.pdf" type="application/pdf" width="auto" height="auto">
-                    <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a class="link" href="exam1.pdf">click here to download the PDF file.</a></p>
-                </object>
-                </div>
-                <div class="project">
-                <h3>Proposal 4 ((+)-Selaginedorffone B): Carbonyl Generation and Electrophotocatalytic Olefination</h3>
-                <object class="document" data="Exam4.pdf" type="application/pdf" width="auto" height="auto">
-                    <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a class="link" href="exam1.pdf">click here to download the PDF file.</a></p>
-                </object>
-                </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1>Total Syntheses</h1>
+            <p>Class projects demonstrating replacement reactions for total syntheses from published literature, with detailed rationale for each proposed implementation.</p>
+        </div>
     </div>
-    </section>
+
+    <!-- Main Content -->
+    <div class="syntheses-container">
+        <!-- Return Button -->
+        <div class="return-btn">
+            <button class="btn" onclick="window.location.href='index.html';">
+                <i class="bi bi-arrow-left"></i> Back to Homepage
+            </button>
+        </div>
+
+        <!-- Synthesis 1 -->
+        <div class="synthesis-card">
+            <div class="card-header">
+                <span class="proposal-number">Proposal 1</span>
+                <h3>Rugulovasine A: A SmI₂ Catalyzed Cyclization</h3>
+            </div>
+            <div class="card-body">
+                <div class="pdf-viewer">
+                    <iframe src="Exam1.pdf" type="application/pdf"></iframe>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action btn-view" data-bs-toggle="modal" data-bs-target="#modal1">
+                        <i class="bi bi-zoom-in"></i> Zoom & View
+                    </button>
+                    <a href="Exam1.pdf" download="Rugulovasine_A_SmI2_Cyclization.pdf" class="btn-action btn-download">
+                        <i class="bi bi-download"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Synthesis 2 -->
+        <div class="synthesis-card">
+            <div class="card-header">
+                <span class="proposal-number">Proposal 2</span>
+                <h3>(-)-Centrolobine: Base-Free Catalytic Wittig Reaction</h3>
+            </div>
+            <div class="card-body">
+                <div class="pdf-viewer">
+                    <iframe src="Exam2.pdf" type="application/pdf"></iframe>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action btn-view" data-bs-toggle="modal" data-bs-target="#modal2">
+                        <i class="bi bi-zoom-in"></i> Zoom & View
+                    </button>
+                    <a href="Exam2.pdf" download="Centrolobine_Wittig_Reaction.pdf" class="btn-action btn-download">
+                        <i class="bi bi-download"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Synthesis 3 -->
+        <div class="synthesis-card">
+            <div class="card-header">
+                <span class="proposal-number">Proposal 3</span>
+                <h3>Alectinib: Electrocatalytic Hydrogenation of Terminal Alkyne</h3>
+            </div>
+            <div class="card-body">
+                <div class="pdf-viewer">
+                    <iframe src="Exam3.pdf" type="application/pdf"></iframe>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action btn-view" data-bs-toggle="modal" data-bs-target="#modal3">
+                        <i class="bi bi-zoom-in"></i> Zoom & View
+                    </button>
+                    <a href="Exam3.pdf" download="Alectinib_Electrocatalytic_Hydrogenation.pdf" class="btn-action btn-download">
+                        <i class="bi bi-download"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Synthesis 4 -->
+        <div class="synthesis-card">
+            <div class="card-header">
+                <span class="proposal-number">Proposal 4</span>
+                <h3>(+)-Selaginedorffone B: Carbonyl Generation and Electrophotocatalytic Olefination</h3>
+            </div>
+            <div class="card-body">
+                <div class="pdf-viewer">
+                    <iframe src="Exam4.pdf" type="application/pdf"></iframe>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action btn-view" data-bs-toggle="modal" data-bs-target="#modal4">
+                        <i class="bi bi-zoom-in"></i> Zoom & View
+                    </button>
+                    <a href="Exam4.pdf" download="Selaginedorffone_B_Photocatalytic_Olefination.pdf" class="btn-action btn-download">
+                        <i class="bi bi-download"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals for Zoomed PDF Viewing -->
+    <div class="modal fade" id="modal1" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rugulovasine A: SmI₂ Catalyzed Cyclization</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="Exam1.pdf" type="application/pdf"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal2" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">(-)-Centrolobine: Base-Free Catalytic Wittig Reaction</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="Exam2.pdf" type="application/pdf"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal3" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Alectinib: Electrocatalytic Hydrogenation of Terminal Alkyne</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="Exam3.pdf" type="application/pdf"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal4" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">(+)-Selaginedorffone B: Carbonyl Generation and Electrophotocatalytic Olefination</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="Exam4.pdf" type="application/pdf"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Ian Falise. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
 
